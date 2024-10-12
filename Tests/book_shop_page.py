@@ -28,13 +28,6 @@ class BookShopPage:
             By.CSS_SELECTOR, ".header-search__button")
         find_elem.click()
 
-    def clear_search(self):
-        WebDriverWait(self.driver, self.wait).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, ".header-search__input")))
-        search_elem = self.driver.find_element(
-            By.CSS_SELECTOR, ".header-search__input")
-        search_elem.clear()
-
     def get_shop_products(self):
         return WebDriverWait(self.driver, self.wait).until(
             EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".products-list article")))
@@ -54,6 +47,8 @@ class BookShopPage:
         button.click()
 
     def get_cart_products(self):
+        WebDriverWait(self.driver, self.wait).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, ".cart-item")))
         return self.driver.find_elements(
             By.CSS_SELECTOR, ".cart-item")
 
@@ -64,7 +59,7 @@ class BookShopPage:
 
     def get_quantity(self):
         input = WebDriverWait(self.driver, self.wait).until(
-            EC.visibility_of_all_elements_located((By.CSS_SELECTOR, ".product-quantity__counter")))
+            EC.presence_of_element_located((By.CSS_SELECTOR, ".product-quantity__counter")))
         return input.get_attribute('value')
 
     def get_all_products_price(self):

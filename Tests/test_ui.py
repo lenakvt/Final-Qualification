@@ -4,17 +4,16 @@ import pytest
 
 shop_url = 'http://www.chitai-gorod.ru/'
 
+
 @pytest.fixture(autouse=True)
 def run_around_tests():
     print('before')
     global driver
     global shop
     driver = webdriver.Chrome()
-    driver.maximize_window()
-    driver.implicitly_wait(4)
     shop = BookShopPage(driver, shop_url)
     shop.get_book_shop()
-    
+
     yield
     print('after')
     driver.quit()
@@ -33,8 +32,6 @@ def test_search_for_the_book_by_id():
 
     assert len(products) == 1, "Продукт не найден"
 
-    shop.clear_search()
-
 
 def test_add_the_book_to_cart():
     shop.search_for_the_book("3022420")
@@ -43,8 +40,6 @@ def test_add_the_book_to_cart():
     shop.go_to_cart()
 
     assert len(shop.get_cart_products()) == 1, "В корзине нет продуктов"
-
-    shop.clear_search()
 
 
 def test_add_two_books_to_cart():
