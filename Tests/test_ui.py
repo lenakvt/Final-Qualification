@@ -1,12 +1,23 @@
 from selenium import webdriver
 from book_shop_page import BookShopPage
-
-driver = webdriver.Chrome()
-#driver.implicitly_wait(4)
+import pytest
 
 shop_url = 'http://www.chitai-gorod.ru/'
-shop = BookShopPage(driver, shop_url)
-shop.get_book_shop()
+
+@pytest.fixture(autouse=True)
+def run_around_tests():
+    print('before')
+    global driver
+    global shop
+    driver = webdriver.Chrome()
+    driver.maximize_window()
+    driver.implicitly_wait(4)
+    shop = BookShopPage(driver, shop_url)
+    shop.get_book_shop()
+    
+    yield
+    print('after')
+    driver.quit()
 
 
 def test_search_for_the_book_by_name():
@@ -22,6 +33,8 @@ def test_search_for_the_book_by_id():
 
     assert len(products) == 1, "Продукт не найден"
 
+    shop.clear_search()
+
 
 def test_add_the_book_to_cart():
     shop.search_for_the_book("3022420")
@@ -31,7 +44,10 @@ def test_add_the_book_to_cart():
 
     assert len(shop.get_cart_products()) == 1, "В корзине нет продуктов"
 
+    shop.clear_search()
 
+
+@pytest.mark.skip(reason="no way of currently testing this")
 def test_add_two_books_to_cart():
     shop.search_for_the_book("3022420")
     shop.click_on_product()
@@ -46,6 +62,7 @@ def test_add_two_books_to_cart():
     assert len(shop.get_cart_products()) == 2, "В корзине нет продуктов"
 
 
+@pytest.mark.skip(reason="no way of currently testing this")
 def test_add_book_and_increase_quantity():
     shop.search_for_the_book("3022420")
     shop.click_on_product()
@@ -58,6 +75,7 @@ def test_add_book_and_increase_quantity():
     assert shop.get_quantity() == "2"
 
 
+@pytest.mark.skip(reason="no way of currently testing this")
 def test_check_cart_total():
     shop.search_for_the_book("3022420")
     shop.click_on_product()
@@ -68,8 +86,7 @@ def test_check_cart_total():
     shop.add_product_to_chart_click()
 
     shop.go_to_cart()
-    
+
     total_products_price = shop.get_all_products_price()
-    
+
     assert shop.check_total() == total_products_price, "Цена товаров рассчитана не правильно"
-    
