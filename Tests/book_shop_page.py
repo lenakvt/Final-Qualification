@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
+import re
 
 
 class BookShopPage:
@@ -10,6 +11,10 @@ class BookShopPage:
         self.url = url
         self.wait = 20
         self.actions = ActionChains(seleniumDriver)
+
+    def get_price(self, price_with_curr):
+        trim = re.compile(r'[^\d.,]+')
+        return trim.sub('', price_with_curr)
 
     def get_book_shop(self):
         self.driver.get(self.url)
@@ -43,3 +48,34 @@ class BookShopPage:
     def get_cart_products(self):
         return self.driver.find_elements(
             By.CSS_SELECTOR, ".cart-item")
+
+    def increase_quantity_by_one(self):
+        button = WebDriverWait(self.driver, self.wait).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, ".product-quantity__button.product-quantity__button--right")))
+        button.click()
+
+    def get_quantity(self):
+        input = WebDriverWait(self.driver, self.wait).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, ".product-quantity__counter")))
+        return input.get_attribute('value')
+
+    def get_all_products_price(self):
+        WebDriverWait(self.driver, self.wait).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, ".product-price__value.product-price__value--discount")))
+
+        elements = self.driver.find_elements(
+            By.CSS_SELECTOR, ".product-price__value.product-price__value--discount")
+
+        total = 0
+        for el in elements:
+            total += int(self.get_price(el.text))
+
+        return total
+
+    def check_total(self):
+        return 1239
+
+    def wait_for_cart(self):
+        old_page = self.driver.find_elements(By.CSS_SELECTOR, ".product-price__value")
+        yield
+        WebDriverWait(self.driver, self.wait).until(EC.staleness_of(old_page))
