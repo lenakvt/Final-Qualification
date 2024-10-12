@@ -47,7 +47,6 @@ def test_add_the_book_to_cart():
     shop.clear_search()
 
 
-@pytest.mark.skip(reason="no way of currently testing this")
 def test_add_two_books_to_cart():
     shop.search_for_the_book("3022420")
     shop.click_on_product()
@@ -62,7 +61,6 @@ def test_add_two_books_to_cart():
     assert len(shop.get_cart_products()) == 2, "В корзине нет продуктов"
 
 
-@pytest.mark.skip(reason="no way of currently testing this")
 def test_add_book_and_increase_quantity():
     shop.search_for_the_book("3022420")
     shop.click_on_product()
@@ -75,7 +73,6 @@ def test_add_book_and_increase_quantity():
     assert shop.get_quantity() == "2"
 
 
-@pytest.mark.skip(reason="no way of currently testing this")
 def test_check_cart_total():
     shop.search_for_the_book("3022420")
     shop.click_on_product()
