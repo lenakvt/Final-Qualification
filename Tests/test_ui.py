@@ -81,4 +81,5 @@ def test_check_cart_total():
 
     total_products_price = shop.get_all_products_price()
 
-    assert shop.check_total() == total_products_price, "Цена товаров рассчитана не правильно"
+    assert shop.check_total() == total_products_price, """Цена товаров 
+    рассчитана не правильно"""
