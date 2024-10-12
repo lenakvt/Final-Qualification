@@ -68,7 +68,6 @@ def test_check_cart_total():
     shop.add_product_to_chart_click()
 
     shop.go_to_cart()
-    shop.wait_for_cart()
     
     total_products_price = shop.get_all_products_price()
     

@@ -61,8 +61,8 @@ class BookShopPage:
 
     def get_all_products_price(self):
         WebDriverWait(self.driver, self.wait).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, ".product-price__value.product-price__value--discount")))
-
+            EC.visibility_of_element_located((By.CSS_SELECTOR, ".product-price__value.product-price__value--discount")))
+       
         elements = self.driver.find_elements(
             By.CSS_SELECTOR, ".product-price__value.product-price__value--discount")
 
@@ -74,8 +74,3 @@ class BookShopPage:
 
     def check_total(self):
         return 1239
-
-    def wait_for_cart(self):
-        old_page = self.driver.find_elements(By.CSS_SELECTOR, ".product-price__value")
-        yield
-        WebDriverWait(self.driver, self.wait).until(EC.staleness_of(old_page))
