@@ -6,7 +6,7 @@ import pytest
 config = ConfigParser()
 config.read("config.ini")
 
-shop_url = config.get("api info", "url")
+shop_url = config.get("ui info", "url")
 
 
 @pytest.fixture(autouse=True)

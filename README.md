@@ -4,6 +4,19 @@
 
 ```
 Тестирование книжного онлайн-магазина: https://www.chitai-gorod.ru/
+
+```
+
+## Запуск UI тестов
+```
+pytest .\Tests\test_ui.py
+
+```
+
+## Запуск API тестов
+```
+pytest .\Tests\test_api.py
+
 ```
 
 ## UI-тесты: 
