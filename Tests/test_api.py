@@ -1,11 +1,13 @@
 
-
+from configparser import ConfigParser
 import pytest
-from book_shop_api import BookShopApi
+from services.book_shop_api import BookShopApi
 
-base_url = 'https://web-gate.chitai-gorod.ru/api/v1'
-token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Mjg5NzY1MjQsImlhdCI6MTcyODgwODUyNCwiaXNzIjoiL2FwaS92MS9hdXRoL2Fub255bW91cyIsInN1YiI6IjllM2RhYzJkNTdiMzIwOTBlNzU4NDRmZWE4NTJkZDI4NjIzY2FlNTk1ZDhiYjBiMDczY2RlYTg0NzNjZjVmNzgiLCJ0eXBlIjoxMH0.jx7i3STGdlyJxY76_mZab_1PxuCRlzaju_nQJcmnKQ0"
+config = ConfigParser()
+config.read("config.ini")
 
+base_url = config.get("api info", "url")
+token = config.get("api info", "token")
 
 @pytest.fixture(autouse=True)
 def run_around_tests():

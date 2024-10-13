@@ -1,8 +1,12 @@
 from selenium import webdriver
-from book_shop_page import BookShopPage
+from configparser import ConfigParser
+from services.book_shop_page import BookShopPage
 import pytest
 
-shop_url = 'http://www.chitai-gorod.ru/'
+config = ConfigParser()
+config.read("config.ini")
+
+shop_url = config.get("api info", "url")
 
 
 @pytest.fixture(autouse=True)
