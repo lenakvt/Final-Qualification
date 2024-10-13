@@ -7,7 +7,7 @@ shop_url = 'http://www.chitai-gorod.ru/'
 
 @pytest.fixture(autouse=True)
 def run_around_tests():
-    print('before')
+    # перед выполнением тестов
     global driver
     global shop
     driver = webdriver.Chrome()
@@ -15,7 +15,7 @@ def run_around_tests():
     shop.get_book_shop()
 
     yield
-    print('after')
+    # после выполнения тестов
     driver.quit()
 
 
