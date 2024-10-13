@@ -7,9 +7,13 @@ class BookShopApi:
         self.token = token
         self.headers = {"Authorization": f"Bearer {self.token}"}
 
-    def clear_cart(self) -> bool:
+    def clear_cart(self) -> str | bool:
         url = f"{self.base_url}/cart"
-        return requests.delete(url).status_code == 200
+        resp = requests.delete(url)
+        if (resp.status_code != 200):
+            return resp.status_code
+
+        return resp.status_code == 200
 
     def get_procucts(self, search_params) -> object:
         url = f"{self.base_url}/search/product"
@@ -37,12 +41,16 @@ class BookShopApi:
             url, json=payload,
             headers=self.headers)
 
-        if (resp.status_code != 200):
+        if (resp.status_code != 204):
             return resp.status_code
 
-        return resp.status_code == 200
+        return resp.status_code == 204
 
-    def delete_product(self, product_id: int) -> bool:
+    def delete_product(self, product_id: int) -> str | bool:
         url = f"{self.base_url}/cart/product/{str(product_id)}"
         resp = requests.delete(url, headers=self.headers)
-        return resp.status_code == 200
+        
+        if (resp.status_code != 204):
+            return resp.status_code
+
+        return resp.status_code == 204

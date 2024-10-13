@@ -9,6 +9,7 @@ config.read("config.ini")
 base_url = config.get("api info", "url")
 token = config.get("api info", "token")
 
+
 @pytest.fixture(autouse=True)
 def run_around_tests():
     # перед выполнением каждого теста
@@ -47,9 +48,10 @@ def test_delete_product():
 
     cart = book.get_cart()
     product_id = cart['products'][0]['id']
-    book.delete_product(product_id)
+    is_delete = book.delete_product(product_id)
     cart = book.get_cart()
 
+    assert is_delete, "Продукт не удален"
     assert len(cart['products']) == 0, "В корзине остались товары"
 
 
@@ -69,14 +71,12 @@ def test_add_incorrect_quantity():
 def test_add_incorrect_producty():
     cart = book.get_cart()
     products_length1 = len(cart['products'])
-    
+
     product = {"id": -1, "adData": {"item_list_name": "product-page"}}
     products_length2 = len(cart['products'])
     status_code = book.add_product_to_cart(product)
 
     cart = book.get_cart()
-    
+
     assert products_length1 == products_length2
     assert status_code == 422, "Продукт существует"
-
-
