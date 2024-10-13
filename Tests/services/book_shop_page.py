@@ -6,20 +6,16 @@ import re
 
 
 class BookShopPage:
-    def __init__(self, seleniumDriver, url):
+    def __init__(self, seleniumDriver, url: str):
         self.driver = seleniumDriver
         self.url = url
         self.wait = 20
         self.actions = ActionChains(seleniumDriver)
 
-    def get_price(self, price_with_curr):
-        trim = re.compile(r'[^\d.,]+')
-        return trim.sub('', price_with_curr)
-
     def get_book_shop(self):
         self.driver.get(self.url)
 
-    def search_for_the_book(self, criteria):
+    def search_for_the_book(self, criteria: str):
         search_elem = self.driver.find_element(
             By.CSS_SELECTOR, ".header-search__input")
         search_elem.clear()
@@ -28,7 +24,7 @@ class BookShopPage:
             By.CSS_SELECTOR, ".header-search__button")
         find_elem.click()
 
-    def get_shop_products(self):
+    def get_shop_products(self) -> object:
         return WebDriverWait(self.driver, self.wait).until(
             EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".products-list article")))
 
@@ -46,7 +42,7 @@ class BookShopPage:
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".header-cart.sticky-header__controls-item")))
         button.click()
 
-    def get_cart_products(self):
+    def get_cart_products(self) -> list:
         WebDriverWait(self.driver, self.wait).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, ".cart-item")))
         return self.driver.find_elements(
@@ -57,12 +53,12 @@ class BookShopPage:
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".product-quantity__button.product-quantity__button--right")))
         button.click()
 
-    def get_quantity(self):
+    def get_quantity(self) -> str:
         input = WebDriverWait(self.driver, self.wait).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, ".product-quantity__counter")))
         return input.get_attribute('value')
 
-    def get_all_products_price(self):
+    def get_all_products_price(self) -> int:
         WebDriverWait(self.driver, self.wait).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, ".product-price__value.product-price__value--discount")))
 
@@ -71,9 +67,20 @@ class BookShopPage:
 
         total = 0
         for el in elements:
-            total += int(self.get_price(el.text))
+            total += self.__get_price(el.text)
 
         return total
 
-    def check_total(self):
-        return 1239
+    def check_total(self) -> int:
+        WebDriverWait(self.driver, self.wait).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, ".info-item.cart-sidebar__item-summary .info-item__value")))
+
+        element = self.driver.find_element(
+            By.CSS_SELECTOR, ".info-item.cart-sidebar__item-summary .info-item__value")
+
+        total = self.__get_price(element.text)
+        return total
+
+    def __get_price(self, price_with_curr: str) -> int:
+        trim = re.compile(r'[^\d.,]+')
+        return int(trim.sub('', price_with_curr))

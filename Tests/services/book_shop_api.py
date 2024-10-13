@@ -2,26 +2,26 @@ import requests
 
 
 class BookShopApi:
-    def __init__(self, base_url, token):
+    def __init__(self, base_url: str, token: str):
         self.base_url = base_url
         self.token = token
         self.headers = {"Authorization": f"Bearer {self.token}"}
 
-    def clear_cart(self):
+    def clear_cart(self) -> bool:
         url = f"{self.base_url}/cart"
         return requests.delete(url).status_code == 200
 
-    def get_procucts(self, search_params):
+    def get_procucts(self, search_params) -> object:
         url = f"{self.base_url}/search/product"
         resp = requests.get(url, params=search_params, headers=self.headers)
         return resp.json()
 
-    def get_cart(self):
+    def get_cart(self) -> object:
         url = f"{self.base_url}/cart"
         resp = requests.get(url, headers=self.headers)
         return resp.json()
 
-    def add_product_to_cart(self, payload) -> str | bool:
+    def add_product_to_cart(self, payload: dict) -> str | bool:
         url = f"{self.base_url}/cart/product"
         resp = requests.post(url, json=payload, headers=self.headers)
 
@@ -42,7 +42,7 @@ class BookShopApi:
 
         return resp.status_code == 200
 
-    def delete_product(self, product_id: int):
+    def delete_product(self, product_id: int) -> bool:
         url = f"{self.base_url}/cart/product/{str(product_id)}"
         resp = requests.delete(url, headers=self.headers)
         return resp.status_code == 200

@@ -1,7 +1,6 @@
 from selenium import webdriver
 from configparser import ConfigParser
 from services.book_shop_page import BookShopPage
-import pytest
 
 config = ConfigParser()
 config.read("config.ini")
@@ -9,7 +8,6 @@ config.read("config.ini")
 shop_url = config.get("ui info", "url")
 
 
-@pytest.fixture(autouse=True)
 def run_around_tests():
     # перед выполнением каждого теста
     global driver
