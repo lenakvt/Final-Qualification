@@ -21,21 +21,28 @@ class BookShopApi:
         resp = requests.get(url, headers=self.headers)
         return resp.json()
 
-    def add_product_to_cart(self, payload) -> bool:
+    def add_product_to_cart(self, payload) -> str | bool:
         url = f"{self.base_url}/cart/product"
         resp = requests.post(url, json=payload, headers=self.headers)
 
+        if (resp.status_code != 200):
+            return resp.status_code
+
         return resp.status_code == 200
 
-    def increase_quantity(self, product_id: int, quantity: int) -> str:
+    def increase_quantity(self, product_id: int, quantity: int) -> str | bool:
         url = f"{self.base_url}/cart"
         payload = [{"id": product_id, "quantity": quantity}]
         resp = requests.put(
             url, json=payload,
             headers=self.headers)
+
+        if (resp.status_code != 200):
+            return resp.status_code
+
         return resp.status_code == 200
-    
-    def delete_product(self, product_id: int): 
+
+    def delete_product(self, product_id: int):
         url = f"{self.base_url}/cart/product/{str(product_id)}"
         resp = requests.delete(url, headers=self.headers)
         return resp.status_code == 200
