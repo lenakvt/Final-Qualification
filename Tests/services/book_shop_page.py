@@ -25,45 +25,52 @@ class BookShopPage:
         find_elem.click()
 
     def get_shop_products(self) -> object:
+        selector = ".products-list article"
         return WebDriverWait(self.driver, self.wait).until(
-            EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".products-list article")))
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, selector)))
 
     def click_on_product(self):
         product = self.get_shop_products()[0]
         self.actions.move_to_element(product).click().perform()
 
     def add_product_to_chart_click(self):
+        selector = ".product-offer-header__buttons"
         button = WebDriverWait(self.driver, self.wait).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, ".product-offer-header__buttons")))
+            EC.element_to_be_clickable((By.CSS_SELECTOR, selector)))
         button.click()
 
     def go_to_cart(self):
+        selector = ".header-cart.sticky-header__controls-item"
         button = WebDriverWait(self.driver, self.wait).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, ".header-cart.sticky-header__controls-item")))
+            EC.element_to_be_clickable((By.CSS_SELECTOR, selector)))
         button.click()
 
     def get_cart_products(self) -> list:
+        selector = ".cart-item"
         WebDriverWait(self.driver, self.wait).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, ".cart-item")))
+            EC.visibility_of_element_located((By.CSS_SELECTOR, selector)))
         return self.driver.find_elements(
             By.CSS_SELECTOR, ".cart-item")
 
     def increase_quantity_by_one(self):
+        selector = ".product-quantity__button.product-quantity__button--right"
         button = WebDriverWait(self.driver, self.wait).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, ".product-quantity__button.product-quantity__button--right")))
+            EC.element_to_be_clickable((By.CSS_SELECTOR, selector)))
         button.click()
 
     def get_quantity(self) -> str:
+        selector = ".product-quantity__counter"
         input = WebDriverWait(self.driver, self.wait).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, ".product-quantity__counter")))
+            EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
         return input.get_attribute('value')
 
     def get_all_products_price(self) -> int:
+        selector = ".product-price__value.product-price__value--discount"
         WebDriverWait(self.driver, self.wait).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, ".product-price__value.product-price__value--discount")))
+            EC.visibility_of_element_located((By.CSS_SELECTOR, selector)))
 
         elements = self.driver.find_elements(
-            By.CSS_SELECTOR, ".product-price__value.product-price__value--discount")
+            By.CSS_SELECTOR, selector)
 
         total = 0
         for el in elements:
@@ -72,11 +79,12 @@ class BookShopPage:
         return total
 
     def check_total(self) -> int:
+        selector = ".info-item.cart-sidebar__item-summary .info-item__value"
         WebDriverWait(self.driver, self.wait).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, ".info-item.cart-sidebar__item-summary .info-item__value")))
+            EC.visibility_of_element_located((By.CSS_SELECTOR, selector)))
 
         element = self.driver.find_element(
-            By.CSS_SELECTOR, ".info-item.cart-sidebar__item-summary .info-item__value")
+            By.CSS_SELECTOR, selector)
 
         total = self.__get_price(element.text)
         return total
