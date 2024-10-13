@@ -39,7 +39,8 @@ def test_increase_quantity():
     book.increase_quantity(product_id, quantity)
     cart = book.get_cart()
 
-    assert cart['products'][0]['quantity'] == quantity, "Неверное количество товара"
+    assert cart['products'][0]['quantity'] == quantity, """Неверное количество 
+    товара"""
 
 
 def test_delete_product():
