@@ -1,7 +1,5 @@
 # Final-Qualification
 
-## Final-Qualification Project
-
 ```
 Тестирование книжного онлайн-магазина: https://www.chitai-gorod.ru/
 
@@ -22,6 +20,27 @@ pytest .\Tests\test_api.py
 ## Запуск всех тестов
 ```
 pytest
+```
+
+### Запуск тестов с отчетами allure
+```
+pytest --alluredir=./Tests/allure_report
+```
+
+## Просмотр тестов
+```
+allure serve .\Tests\allure_report\
+```
+
+## Установка сервера allure на windows
+```
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+irm get.scoop.sh | iex
+scoop install allure
+```
+***проверка версии allure***
+```
+allure --version
 ```
 
 ## UI-тесты: 

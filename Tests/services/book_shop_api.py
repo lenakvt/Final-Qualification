@@ -1,4 +1,5 @@
 import requests
+import allure
 
 
 class BookShopApi:
@@ -7,6 +8,7 @@ class BookShopApi:
         self.token = token
         self.headers = {"Authorization": f"Bearer {self.token}"}
 
+    @allure.step("очистить корзину")
     def clear_cart(self) -> str | bool:
         url = f"{self.base_url}/cart"
         resp = requests.delete(url)
@@ -15,16 +17,19 @@ class BookShopApi:
 
         return resp.status_code == 200
 
+    @allure.step("получить продукты")
     def get_procucts(self, search_params) -> object:
         url = f"{self.base_url}/search/product"
         resp = requests.get(url, params=search_params, headers=self.headers)
         return resp.json()
 
+    @allure.step("получить корзину")
     def get_cart(self) -> object:
         url = f"{self.base_url}/cart"
         resp = requests.get(url, headers=self.headers)
         return resp.json()
 
+    @allure.step("добавить продукт в корзину")
     def add_product_to_cart(self, payload: dict) -> str | bool:
         url = f"{self.base_url}/cart/product"
         resp = requests.post(url, json=payload, headers=self.headers)
@@ -34,6 +39,7 @@ class BookShopApi:
 
         return resp.status_code == 200
 
+    @allure.step("увеличить количество")
     def increase_quantity(self, product_id: int, quantity: int) -> str | bool:
         url = f"{self.base_url}/cart"
         payload = [{"id": product_id, "quantity": quantity}]
@@ -46,6 +52,7 @@ class BookShopApi:
 
         return resp.status_code == 204
 
+    @allure.step("удалить продукт")
     def delete_product(self, product_id: int) -> str | bool:
         url = f"{self.base_url}/cart/product/{str(product_id)}"
         resp = requests.delete(url, headers=self.headers)
